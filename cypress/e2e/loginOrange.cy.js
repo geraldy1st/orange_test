@@ -1,10 +1,8 @@
 describe("Tester le login Orange", () => {
-  it("login avec les mauvais identifiants", () => {
-    cy.loginOrange("Admin", "fauxmdp");
-    cy.get(".oxd-alert-content-text").should(
-      "be.visible",
-      "invalid credentials"
-    );
+  it("authentification", () => {
+    cy.fixture("dataLogin").then((data) => {
+      cy.loginOrange(data.user.username, data.user.password);
+    });
   });
 
   it("login avec les bons identifiants", () => {
@@ -13,5 +11,15 @@ describe("Tester le login Orange", () => {
       "eq",
       "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index"
     );
+  });
+
+  it("login avec les mauvais identifiants", () => {
+    cy.fixture("dataLogin").then((data) => {
+      cy.loginOrange("Admin", "fauxmdp");
+      cy.get(".oxd-alert-content-text").should(
+        "be.visible",
+        "invalid credentials"
+      );
+    });
   });
 });
